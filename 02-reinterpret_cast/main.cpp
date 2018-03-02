@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 
 class FooBase {
@@ -22,17 +23,21 @@ class FooBar : public FooBase, public BarBase {
 
 
 int main() {
-    FooBar foobar;
+    auto ptr = std::make_unique<FooBar>();
+    auto& foobar = *ptr;
 
     ((BarBase*)(&foobar))->bar();
     ((FooBase*)(&foobar))->foo();
     (reinterpret_cast<BarBase*>(&foobar))->bar();
     (reinterpret_cast<FooBase*>(&foobar))->foo();
 
+    std::cout << "static_cast" << std::endl;
     std::cout << static_cast<BarBase*>(&foobar) << std::endl;
     std::cout << static_cast<FooBase*>(&foobar) << std::endl;
+    std::cout << "c-style cast" << std::endl;
     std::cout << (BarBase*)(&foobar) << std::endl;
     std::cout << (FooBase*)(&foobar) << std::endl;
+    std::cout << "reinterpret_cast" << std::endl;
     std::cout << reinterpret_cast<BarBase*>(&foobar) << std::endl;
     std::cout << reinterpret_cast<FooBase*>(&foobar) << std::endl;
 
